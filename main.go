@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"strconv"
 	"toy_blockchain/blockchain"
 	"toy_blockchain/files_oper"
 )
@@ -11,6 +13,14 @@ func main() {
 	blockchain := blockchain.BlockChain{}
 
 	blockchain.AddBlock(fileBytes)
+	path := "./test"
 
+	for i := range 3 {
+		path = path + strconv.Itoa(i) + ".txt"
+		fileBytes := files_oper.ReadFromFile(path)
+		blockchain.AddBlock(fileBytes)
+		path = "./test"
+	}
+	fmt.Println(blockchain.CheckValid())
 	blockchain.Print()
 }
