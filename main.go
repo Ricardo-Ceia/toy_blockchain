@@ -21,7 +21,7 @@ func main() {
 		blockchain.AddBlock(fileBytes)
 		path = "./test"
 	}
-	blockchain.TemperBlock(2, []byte("i have tried to hack this but failed"))
+	blockchain.TemperBlockWithoutDetection(1, []byte("i have tried to hack and succeded without breaking the chain"))
 	fmt.Println(blockchain.CheckValid())
 	blockchain.Print()
 }

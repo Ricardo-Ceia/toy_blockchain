@@ -96,16 +96,44 @@ func (l *BlockChain) CheckValid() bool {
 	return true
 }
 
-func (l *BlockChain) TemperBlock(idx uint32, newValue []byte) bool {
+func (l *BlockChain) TemperBlock(idx uint32, newValue []byte) {
 	current := l.head
 	for current != nil {
 		if current.block.index == idx {
 			current.block.value = newValue
-			return true
+			computeHash(current.block)
+			return
 		}
 		current = current.next
 	}
-	return false
+}
+
+func (l *BlockChain) TemperBlockWithoutDetection(idx uint32, newValue []byte) {
+	var target *BlockNode
+	cur := l.head
+	for cur != nil {
+		if cur.block.index == idx {
+			target = cur
+			break
+		}
+		cur = cur.next
+	}
+	target.block.value = newValue
+
+	target.block.hash = computeHash(target.block)
+
+	prev := target
+	cur = target.next
+	for cur != nil {
+		cur.block.previousHash = prev.block.hash
+
+		cur.block.timestamp = uint32(time.Now().Unix())
+
+		cur.block.hash = computeHash(cur.block)
+
+		prev = cur
+		cur = cur.next
+	}
 }
 
 func (l *BlockChain) Print() {
