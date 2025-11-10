@@ -83,9 +83,11 @@ func (l *BlockChain) CheckValid() bool {
 	current := l.head.next
 	for current.next != nil {
 		if !bytes.Equal(current.block.hash, computeHash(current.block)) {
+			fmt.Printf("Invalid chain at index:%d \n", current.block.index)
 			return false
 		}
 		if !bytes.Equal(current.block.previousHash, prev.block.hash) {
+			fmt.Printf("Invalid chain at index:%d \n", current.block.index)
 			return false
 		}
 		prev = current
@@ -94,14 +96,26 @@ func (l *BlockChain) CheckValid() bool {
 	return true
 }
 
+func (l *BlockChain) TemperBlock(idx uint32, newValue []byte) bool {
+	current := l.head
+	for current != nil {
+		if current.block.index == idx {
+			current.block.value = newValue
+			return true
+		}
+		current = current.next
+	}
+	return false
+}
+
 func (l *BlockChain) Print() {
 	current := l.head
 	for current != nil {
 		b := current.block
 		fmt.Printf("Index: %d\n", b.index)
 		fmt.Printf("Timestamp: %d\n", b.timestamp)
-		fmt.Printf("Value: %s\n", string(b.value)) // decode bytes to string
-		fmt.Printf("Hash: %x\n", b.hash)           // print hash as hex
+		fmt.Printf("Value: %s\n", string(b.value))
+		fmt.Printf("Hash: %x\n", b.hash)
 		if b.previousHash != nil {
 			fmt.Printf("Previous Hash: %x\n", b.previousHash)
 		} else {
