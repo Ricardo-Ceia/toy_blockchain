@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fileBytes := files_oper.ReadFromFile("./readme.txt")
+	fileBytes := files_oper.ReadFromFile("./testG.txt")
 
 	blockchain := blockchain.BlockChain{}
 
