@@ -81,7 +81,7 @@ func (l *BlockChain) AddBlock(value []byte) {
 func (l *BlockChain) CheckValid() bool {
 	prev := l.head
 	current := l.head.next
-	for current.next != nil {
+	for current != nil {
 		if !bytes.Equal(current.block.hash, computeHash(current.block)) {
 			fmt.Printf("Invalid chain at index:%d \n", current.block.index)
 			return false
@@ -101,7 +101,6 @@ func (l *BlockChain) TemperBlock(idx uint32, newValue []byte) {
 	for current != nil {
 		if current.block.index == idx {
 			current.block.value = newValue
-			computeHash(current.block)
 			return
 		}
 		current = current.next
